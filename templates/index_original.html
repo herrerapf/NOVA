@@ -1,0 +1,12 @@
+
+{% extends "base.html" %}
+{% block title %}Inicio - NOVA{% endblock %}
+{% block content %}
+  <div class="hero">
+    <h1>NOVA</h1>
+    <p>Administra clientes y asigna rutinas avanzadas con ejercicios.</p>
+    {% if not current_user.is_authenticated %}
+      <p><a class="btn" href="{{ url_for('register') }}">Crear cuenta</a> <a class="btn ghost" href="{{ url_for('login') }}">Iniciar sesión</a></p>
+    {% endif %}
+  </div>
+{% endblock %}

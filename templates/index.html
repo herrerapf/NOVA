@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}Inicio - NOVA{% endblock %}
+{% block body_class %}has-video{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<!-- VIDEO DE FONDO -->
+<video autoplay muted loop playsinline
+       id="video-fondo"
+       class="video-background"
+       poster="{{ url_for('static', filename='images/poster.jpg') }}">
+  <source src="{{ url_for('static', filename='videos/fondo.mp4') }}" type="video/mp4">
+  Tu navegador no soporta el elemento video.
+</video>
+
+<div class="video-overlay" aria-hidden="true"></div>
+
+<!-- CONTENIDO PRINCIPAL SOBRE EL VIDEO -->
+<section class="hero">
+  <div class="hero-card">
+    <h1>NOVA</h1>
+    <p>Administra clientes y asigna rutinas avanzadas con ejercicios.</p>
+
+    {% if not current_user.is_authenticated %}
+    <div class="hero-actions">
+      <button id="btn-crear" class="btn">Crear cuenta</button>
+      <button id="btn-login" class="btn ghost">Iniciar sesión</button>
+    </div>
+    {% else %}
+    <div class="hero-actions">
+      {% if current_user.is_admin() %}
+      <a href="{{ url_for('admin_dashboard') }}" class="btn">Ir al panel admin</a>
+      {% else %}
+      <a href="{{ url_for('dashboard') }}" class="btn">Ir al panel</a>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- MODALES -->
+<div id="modal-overlay" class="modal-overlay hidden"></div>
+
+<div id="modal-registrar" class="modal hidden" aria-hidden="true">
+  <div class="modal-card">
+
+    <button class="modal-close inside" data-target="modal-registrar">&times;</button>
+
+    <h2>Crear cuenta</h2>
+    <form method="post" action="{{ url_for('index') }}">
+      <input type="hidden" name="form-type" value="register">
+      {{ csrf_token() if csrf_token is defined else '' }}
+
+      <label>Nombre</label>
+      <input name="nombre" required>
+
+      <label>Correo</label>
+      <input name="email" type="email" required>
+
+      <label>Número de celular</label>
+      <input name="phone" type="text" placeholder="Tu WhatsApp" required>
+
+      <label>Contraseña</label>
+      <input name="password" type="password" required>
+
+      <p><button class="btn primary" type="submit">Registrarme</button></p>
+    </form>
+  </div>
+</div>
+
+
+<div id="modal-login" class="modal hidden" aria-hidden="true">
+  <div class="modal-card">
+
+    <button class="modal-close inside" data-target="modal-login">&times;</button>
+
+    <h2>Iniciar sesión</h2>
+    <form method="post" action="{{ url_for('index') }}">
+      <input type="hidden" name="form-type" value="login">
+      {{ csrf_token() if csrf_token is defined else '' }}
+
+      <label>Correo</label>
+      <input name="email" type="email" required>
+
+      <label>Contraseña</label>
+      <input name="password" type="password" required>
+
+      <p><button class="btn primary" type="submit">Entrar</button></p>
+    </form>
+  </div>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/home.js') }}"></script>
+{% endblock %}

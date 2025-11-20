@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Panel — {{ current_user.nombre }}{% endblock %}
+
+{% block content %}
+
+<!-- CONTENEDOR CON MARGEN SUPERIOR -->
+<div class="user-dashboard-container">
+
+    <div class="user-dashboard">
+
+        <div class="user-card">
+            <h2>Bienvenido, {{ current_user.nombre }}</h2>
+
+            <p class="user-id">
+                ID de cliente: <strong>{{ current_user.client_id }}</strong>
+            </p>
+
+            <div class="status-box">
+
+                {% set dias = current_user.days_remaining() %}
+
+                {% if dias and dias > 0 %}
+                    <p class="status-active">Suscripción activa</p>
+                    <p>Días restantes: <strong>{{ dias }}</strong></p>
+                {% else %}
+                    <p class="status-expired">Aún no tienes suscripción</p>
+                {% endif %}
+
+            </div>
+        </div>
+
+        <div class="section-title">Tus rutinas</div>
+
+        {% if routines %}
+            <div class="routine-grid">
+                {% for r in routines %}
+                    <div class="routine-card">
+                        <h3>{{ r.titulo }}</h3>
+                        <p class="date">Creada: {{ r.fecha_creacion.strftime('%Y-%m-%d') }}</p>
+
+                        <p>
+                            {{ r.descripcion[:150] }}
+                            {% if r.descripcion|length > 150 %}...{% endif %}
+                        </p>
+
+                        <a class="btn small" href="{{ url_for('view_routine', rid=r.id) }}">Ver rutina</a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="no-routines">No tienes rutinas asignadas todavía.</p>
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

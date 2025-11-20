@@ -1,0 +1,68 @@
+
+{% extends "base.html" %}
+{% block title %}Editar rutina{% endblock %}
+{% block content %}
+  <h2>Editar rutina: {{ r.titulo }}</h2>
+  <form method="post">
+    {{ form.hidden_tag() }}
+    <label>Título</label>{{ form.titulo() }}
+    <label>Descripción</label>{{ form.descripcion(rows=4) }}
+    <p>{{ form.submit(class="btn") }}</p>
+  </form>
+
+  <h3>Ejercicios</h3>
+  <div id="exercises-list">
+    {% for e in exercises %}
+      <div class="card small">
+        <strong>{{ e.nombre }}</strong> — {{ e.series or '' }} x {{ e.repeticiones or '' }} — {{ e.peso or '' }} <br>
+        <small>Dia: {{ e.dia or '-' }}</small>
+        <p>{{ e.notas or '' }}</p>
+        <button class="btn danger tiny" onclick="deleteExercise({{ e.id }})">Eliminar ejercicio</button>
+      </div>
+    {% endfor %}
+  </div>
+
+  <h4>Añadir ejercicio</h4>
+  <form id="add-ex-form" onsubmit="return addExercise(event)">
+    <label>Nombre<input id="enombre"></label>
+    <label>Series<input id="eseries" type="number"></label>
+    <label>Repeticiones<input id="ereps"></label>
+    <label>Peso<input id="epeso"></label>
+    <label>Día<input id="edia"></label>
+    <label>Notas<textarea id="enotas"></textarea></label>
+    <p><button class="btn" type="submit">Agregar ejercicio</button></p>
+  </form>
+
+<script>
+async function addExercise(e){
+  e.preventDefault();
+  const data = {
+    nombre: document.getElementById('enombre').value,
+    series: document.getElementById('eseries').value,
+    repeticiones: document.getElementById('ereps').value,
+    peso: document.getElementById('epeso').value,
+    dia: document.getElementById('edia').value,
+    notas: document.getElementById('enotas').value
+  };
+  const res = await fetch('{{ url_for('admin_new_exercise', rid=r.id) }}', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(data)
+  });
+  const j = await res.json();
+  if(j.ok){
+    location.reload();
+  } else {
+    alert('Error al agregar');
+  }
+}
+
+async function deleteExercise(id){
+  if(!confirm('Eliminar ejercicio?')) return;
+  const res = await fetch('{{ url_for('admin_delete_exercise', eid=0) }}'.replace('0', id), {method:'POST'});
+  const j = await res.json();
+  if(j.ok) location.reload();
+}
+</script>
+
+{% endblock %}

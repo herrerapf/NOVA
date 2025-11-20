@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Registro{% endblock %}
+{% block content %}
+  <h2>Registro</h2>
+  <!-- 🔧 Añadido action apuntando a 'index' -->
+  <form method="post" action="{{ url_for('index') }}">
+    {{ form.hidden_tag() }}
+    <label>Nombre</label>{{ form.nombre() }}
+    <label>Correo</label>{{ form.email() }}
+    <label>Contraseña</label>{{ form.password() }}
+    <p>{{ form.submit(class="btn") }}</p>
+  </form>
+{% endblock %}

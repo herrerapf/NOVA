@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}Crear rutina{% endblock %}
+{% block content %}
+  <h2>Crear rutina para {{ user.nombre }}</h2>
+
+  {% if days_remaining is not none and days_remaining <= 0 %}
+    <p class="flash warning">El usuario no tiene suscripción activa. Renueva la suscripción antes de crear una rutina.</p>
+  {% endif %}
+
+  <form id="routine-form" method="post">
+    <label>Título</label>
+    <input name="titulo" required>
+
+    <label>Descripción general</label>
+    <textarea name="descripcion" rows="3"></textarea>
+
+    <h4 style="margin-top:18px">Ejercicios</h4>
+    <div id="exercises-list"></div>
+
+    <p style="margin-top:8px;">
+      <button type="button" id="add-ex" class="btn ghost">+ Añadir ejercicio</button>
+    </p>
+
+    <input type="hidden" name="exercises" id="exercises-input">
+
+    <p style="margin-top:12px;">
+      <button type="submit" class="btn">Crear rutina</button>
+      <a class="btn ghost" href="{{ url_for('admin_user_detail', user_id=user.id) }}">Cancelar</a>
+    </p>
+  </form>
+
+  <template id="exercise-template">
+    <div class="card exercise-item" style="margin-bottom:10px; padding:10px;">
+      <label>Nombre</label>
+      <input class="ex-name" name="nombre" required>
+
+      <div style="display:flex; gap:8px; margin-top:8px;">
+        <div style="flex:1">
+          <label>Series</label>
+          <input class="ex-series" name="series" type="number" min="0">
+        </div>
+        <div style="flex:1">
+          <label>Repeticiones</label>
+          <input class="ex-reps" name="reps">
+        </div>
+        <div style="flex:1">
+          <label>Peso</label>
+          <input class="ex-weight" name="peso">
+        </div>
+      </div>
+
+      <label style="margin-top:8px">Notas</label>
+      <input class="ex-notes" name="notas">
+
+      <div style="margin-top:8px; text-align:right;">
+        <button type="button" class="btn danger small btn-remove">Eliminar</button>
+      </div>
+    </div>
+  </template>
+
+  <script>
+  (function(){
+    const addBtn = document.getElementById('add-ex');
+    const list = document.getElementById('exercises-list');
+    const tpl = document.getElementById('exercise-template');
+    const form = document.getElementById('routine-form');
+    const hiddenInput = document.getElementById('exercises-input');
+
+    function addExercise(data){
+      const node = tpl.content.cloneNode(true);
+      const wrapper = node.querySelector('.exercise-item');
+      if (data) {
+        wrapper.querySelector('.ex-name').value = data.nombre || '';
+        wrapper.querySelector('.ex-series').value = data.series || '';
+        wrapper.querySelector('.ex-reps').value = data.repeticiones || '';
+        wrapper.querySelector('.ex-weight').value = data.peso || '';
+        wrapper.querySelector('.ex-notes').value = data.notas || '';
+      }
+      wrapper.querySelector('.btn-remove').addEventListener('click', () => {
+        wrapper.remove();
+      });
+      list.appendChild(wrapper);
+    }
+
+    addBtn.addEventListener('click', ()=> addExercise());
+    addExercise(); // al menos uno por defecto
+
+    form.addEventListener('submit', function(e){
+      const items = Array.from(list.querySelectorAll('.exercise-item'));
+      const exs = items.map(it => ({
+        nombre: it.querySelector('.ex-name').value,
+        series: it.querySelector('.ex-series').value,
+        repeticiones: it.querySelector('.ex-reps').value,
+        peso: it.querySelector('.ex-weight').value,
+        notas: it.querySelector('.ex-notes').value
+      })).filter(x => x.nombre && x.nombre.trim().length > 0);
+
+      hiddenInput.value = JSON.stringify(exs);
+      // envio normal del formulario
+    });
+  })();
+  </script>
+{% endblock %}

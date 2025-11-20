@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Rutina - {{ r.titulo }}{% endblock %}
+{% block content %}
+
+  <h2>{{ r.titulo }}</h2>
+  <p class="meta">
+      Creada: {{ r.fecha_creacion.strftime('%Y-%m-%d %H:%M') }} — 
+      Por: {{ r.creado_por or 'Entrenador' }}
+  </p>
+
+  <div class="routine-body">
+    {{ r.descripcion | nl2br }}
+  </div>
+
+  <h3>Ejercicios</h3>
+
+  {% if exercises %}
+    <ul class="cards">
+      {% for e in exercises %}
+        <li class="card">
+          <strong>{{ e.nombre }}</strong>
+
+          <p class="meta">
+            {{ e.series or '' }}
+            {% if e.series and e.repeticiones %} x {% endif %}
+            {{ e.repeticiones or '' }}
+            {% if e.peso %} — {{ e.peso }}{% endif %}
+          </p>
+
+          <p>{{ e.notas or '' }}</p>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No hay ejercicios en esta rutina.</p>
+  {% endif %}
+
+  <p><a class="btn" href="{{ url_for('dashboard') }}">Volver</a></p>
+
+{% endblock %}

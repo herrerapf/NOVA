@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Iniciar sesión{% endblock %}
+{% block content %}
+  <h2>Iniciar sesión</h2>
+  <!-- 🔧 Añadido action apuntando a 'index' -->
+  <form method="post" action="{{ url_for('index') }}">
+    {{ form.hidden_tag() }}
+    <label>Correo</label>{{ form.email() }}
+    <label>Contraseña</label>{{ form.password() }}
+    <p>{{ form.submit(class="btn") }}</p>
+  </form>
+{% endblock %}

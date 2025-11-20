@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{% block title %}NOVA{% endblock %}</title>
+
+  <!-- estilos base-->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+
+  <!-- estilos de la home -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+
+  <!-- tema moderno -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/theme_modern.css') }}">
+
+  {% block head %}{% endblock %}
+</head>
+
+<body class="{% block body_class %}{% endblock %}">
+
+<!-- 🟢 Botón flotante WhatsApp -->
+<a href="https://wa.me/3136530762?text=Hola,%20quiero%20más%20información%20sobre%20NOVA" 
+   class="whatsapp-float" 
+   target="_blank"
+   aria-label="WhatsApp">
+  <img src="{{ url_for('static', filename='images/whatsapp.png') }}" alt="WhatsApp">
+</a>
+
+<!-- 🟡 MENSAJES FLASH FLOTANTES -->
+<div class="flash-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for cat, msg in messages %}
+          <div class="flash-message {{ cat }}">{{ msg }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+</div>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <!-- Nombre a la izquierda -->
+      <a class="brand" href="{{ url_for('index') }}">NOVA</a>
+
+      <!-- Zona derecha: si no autenticado mostramos logo pequeño -->
+      <div class="nav-right">
+        {% if current_user.is_authenticated %}
+          <span class="small">Hola, {{ current_user.nombre }}</span>
+          {% if current_user.is_admin() %}
+            <a href="{{ url_for('admin_dashboard') }}">Admin</a>
+          {% else %}
+            <a href="{{ url_for('dashboard') }}">Panel</a>
+            <a href="{{ url_for('mis_rutinas') }}">Mis rutinas</a>
+          {% endif %}
+          <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+        {% else %}
+          <!-- Logo pequeño a la derecha -->
+          <a href="{{ url_for('index') }}" class="nav-logo-link" aria-label="NOVA">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="NOVA" class="nav-logo">
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <{% if request.endpoint == 'index' %}
+<footer class="footer">
+  <div class="container">NOVA &copy2025</div>
+</footer>
+{% endif %}
+
+
+  <!-- JS principal (incluye home.js al final de body) -->
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

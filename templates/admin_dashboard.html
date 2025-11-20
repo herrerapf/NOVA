@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Panel de Administración{% endblock %}
+
+{% block content %}
+
+<div class="admin-page-wrapper">
+
+  <h2 class="admin-title">Panel de Administración</h2>
+
+  <!-- BUSCADOR -->
+  <div class="admin-search-box">
+    <input id="searchInput" type="text" placeholder="Buscar usuario..." />
+  </div>
+
+  <!-- LISTA DE USUARIOS -->
+  <div id="userList">
+    {% for u in users %}
+    <div class="admin-user-card">
+
+      <div class="admin-user-info">
+        <h3>{{ u.nombre }}</h3>
+
+        <p>{{ u.email }}</p>
+        <p>WhatsApp: <strong>{{ u.phone }}</strong></p>
+
+        <p>Registrado: {{ u.created_at.strftime('%Y-%m-%d') }}</p>
+
+        <p class="admin-user-id">ID: {{ u.client_id }}</p>
+      </div>
+
+      <div class="admin-actions">
+        <a class="btn small" href="{{ url_for('admin_user_detail', user_id=u.id) }}">Ver / Asignar</a>
+
+        <form method="post" action="{{ url_for('admin_user_delete', user_id=u.id) }}"
+              onsubmit="return confirm('¿Eliminar usuario {{ u.nombre }}?')">
+          <button type="submit" class="btn danger small">Eliminar</button>
+        </form>
+      </div>
+
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Buscador
+  const searchInput = document.getElementById("searchInput");
+  const userList = document.getElementById("userList");
+
+  searchInput.addEventListener("input", () => {
+    let filter = searchInput.value.toLowerCase();
+    let cards = userList.getElementsByClassName("admin-user-card");
+
+    for (let card of cards) {
+      let text = card.innerText.toLowerCase();
+      card.style.display = text.includes(filter) ? "flex" : "none";
+    }
+  });
+</script>
+{% endblock %}

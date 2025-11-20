@@ -1,0 +1,245 @@
+
+:root{
+  --bg:#0f1724; --card:#0b1220; --accent:#06b6d4; --muted:#94a3b8; --text:#e6eef6;
+}
+/* ----------------------------
+   WhatsApp Floating Button
+   (Seguro, sin errores)
+----------------------------- */
+.whatsapp-float {
+  position: fixed;
+  bottom: 26px;
+  right: 26px;
+  z-index: 9999;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+
+  /* Fallback universal */
+  background: rgba(0,0,0,0.35);
+  box-shadow: 0 6px 22px rgba(0,0,0,0.55);
+
+  padding: 10px;
+  transition: all 0.25s ease;
+}
+
+/* Si el navegador soporta backdrop-filter, activamos blur */
+@supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .whatsapp-float {
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    background: rgba(0,0,0,0.22);
+  }
+}
+
+/* Imagen interna del ícono */
+.whatsapp-float img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.25s ease;
+}
+
+/* Hover animado elegante */
+.whatsapp-float:hover {
+  transform: scale(1.12);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.65);
+}
+
+.whatsapp-float:hover img {
+  transform: scale(1.10);
+}
+/* ===================================================
+   FLASH MESSAGES — SIN BACKDROP-FILTER (100% compatible)
+=================================================== */
+.flash-container {
+  position: fixed;
+  top: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.flash-message {
+  padding: 12px 22px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+
+  color: #ffffff;
+
+  /* Fondo semi-transparente sin blur */
+  background: rgba(20, 20, 20, 0.55);
+
+  /* Borde Glass */
+  border: 1px solid rgba(255, 255, 255, 0.15);
+
+  /* Sombra elegante */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+
+  animation: fadeInOut 3.2s ease forwards;
+}
+
+/* Colores del borde lateral */
+.flash-message.success {
+  border-left: 6px solid rgba(0, 255, 130, 0.9);
+}
+
+.flash-message.danger {
+  border-left: 6px solid rgba(255, 70, 70, 0.9);
+}
+
+.flash-message.warning {
+  border-left: 6px solid rgba(255, 190, 0, 0.9);
+}
+
+.flash-message.info {
+  border-left: 6px solid rgba(41, 151, 255, 0.9);
+}
+
+/* Animación suave */
+@keyframes fadeInOut {
+  0%   { opacity: 0; transform: translateY(-20px); }
+  10%  { opacity: 1; transform: translateY(0); }
+  90%  { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-15px); }
+}
+
+
+*{box-sizing:border-box;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial;}
+body{margin:0;background:linear-gradient(180deg,#071022 0%,#071735 100%);color:var(--text);min-height:100vh;}
+.container{max-width:1000px;margin:28px auto;padding:0 18px;}
+.nav{background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.03);}
+.nav .container{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;}
+.brand{font-weight:700;color:var(--text);text-decoration:none;}
+.nav-right a, .nav-right span{margin-left:14px;color:var(--muted);text-decoration:none;font-size:0.95rem;}
+.hero{padding:38px;background:linear-gradient(90deg, rgba(6,182,212,0.08), rgba(96,165,250,0.04));border-radius:12px;margin-top:18px;}
+.btn{display:inline-block;padding:8px 12px;border-radius:8px;background:var(--accent);color:#022; text-decoration:none;border:none;cursor:pointer;}
+.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--text);}
+.small{font-size:0.9rem;padding:6px 8px;}
+.cards{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;}
+.card{background:var(--card);padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);}
+.meta{color:var(--muted);font-size:0.85rem;margin-bottom:8px;}
+.table{width:100%;border-collapse:collapse;margin-top:12px;}
+.table th, .table td{padding:10px;border-bottom:1px solid rgba(255,255,255,0.03);text-align:left;color:var(--muted);}
+.flashes{list-style:none;padding:0;margin:14px 0;}
+.flash{padding:10px;border-radius:8px;margin-bottom:8px;}
+.flash.success{background:rgba(16,185,129,0.08);color:var(--text);}
+.flash.warning{background:rgba(250,204,21,0.06);}
+.flash.danger{background:rgba(239,68,68,0.06);}
+.footer{padding:18px 0;text-align:center;color:var(--muted);margin-top:30px;}
+form label{display:block;margin-top:10px;color:var(--muted);}
+input, textarea, select{width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:var(--text);}
+.btn.danger{background:#ef4444;color:white;}
+.small{padding:6px 8px;border-radius:6px;}
+.routine-body{white-space:pre-wrap;background:rgba(255,255,255,0.02);padding:12px;border-radius:8px;}
+
+/* ==========================
+   PANEL ADMIN — TÍTULO
+=========================== */
+.admin-title {
+    text-align: center;
+    font-size: 2rem;
+    margin-top: 80px;
+    margin-bottom: 30px;
+    color: #fff;
+}
+
+/* ==========================
+   BUSCADOR
+=========================== */
+.admin-search-box {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+.admin-search-input {
+    width: 380px;
+    padding: 12px 18px;
+    border-radius: 12px;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    color: #fff;
+
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+}
+
+/*TARJETAS DE USUARIOS*/
+.admin-users-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 35px;
+    padding-bottom: 80px;
+}
+
+.admin-user-card {
+    width: 60%;
+    padding: 25px 30px;
+    border-radius: 18px;
+
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 25px rgba(0,0,0,0.4);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+}
+
+.admin-user-info p {
+    margin: 4px 0;
+    font-size: 1rem;
+}
+
+.user-name {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.user-email {
+    opacity: 0.7;
+}
+
+.user-date {
+    opacity: 0.5;
+    font-size: 0.9rem;
+}
+
+.admin-user-id {
+    opacity: 0.7;
+    font-size: 0.9rem;
+}
+
+.admin-user-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Evita el fondo blanco del autocompletado del navegador */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+    background-color: #1a1a1a !important;     /* fondo oscuro */
+    -webkit-text-fill-color: #e5e5e5 !important; /* texto claro */
+    transition: background-color 5000s ease-in-out 0s;
+    border: 1px solid #333 !important;
+    box-shadow: 0 0 0px 1000px #1a1a1a inset !important;
+}
+
+
